@@ -136,8 +136,14 @@ Header("Running MagnetResponse to collect artifacts")
 
 $CollectionArguments = @()
 if ($CollectionProfile -eq "Default") {
-    $CollectionArguments += "/capturevolatile"# /capturesystemfiles /captureram"
+    $CollectionArguments += "/capturevolatile /capturesystemfiles /captureram"
     Write-Host "Default collection method selected`n`n - Arguments: $CollectionArguments"
+} elseif ($CollectionProfile -eq "CaptureRAM") {
+    $CollectionArguments += "/capturevolatile /captureram"
+    Write-Host "CaptureRAM collection method selected`n`n - Arguments: $CollectionArguments"
+} elseif ($CollectionProfile -eq "SystemFiles") {
+    $CollectionArguments += "/capturevolatile /capturesystemfiles"
+    Write-Host "SystemFiles collection method selected`n`n - Arguments: $CollectionArguments"
 }
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
@@ -165,8 +171,8 @@ if ($Compress) {
 
 Header("Output Details")
 Write-Host "`nOutput Path: $OutputPath"
-Write-Host "Folder checksum:" 
-Get-FileHash -Algorithm SHA256 -Path (Join-Path -Path $OutputPath -ChildPath "*") -ErrorAction SilentlyContinue
+Write-Host "`nFolder checksum:" 
+Get-FileHash -Algorithm SHA256 -Path (Join-Path -Path $OutputPath -ChildPath "*") -ErrorAction SilentlyContinue | Format-List
 Write-Host ""
 
 Stop-Transcript
